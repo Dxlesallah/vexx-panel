@@ -611,13 +611,43 @@
 
         function showWelcome(event) {
             event.preventDefault();
-            document.querySelector('.login-page').style.display = 'none';
-            document.querySelector('.welcome-page').style.display = 'flex';
             
-            setTimeout(() => {
-                document.querySelector('.welcome-page').style.display = 'none';
-                document.querySelector('.panel-page').classList.add('active');
-            }, 4000);
+            // Form verilerini al
+            const form = event.target;
+            const username = form.querySelector('input[name="username"]').value;
+            const password = form.querySelector('input[name="password"]').value;
+            
+            // Kayıt formu mu yoksa giriş formu mu kontrol et
+            const isRegisterForm = form.closest('#registerForm') !== null;
+            
+            if (isRegisterForm) {
+                // Kayıt işlemi
+                const email = form.querySelector('input[name="email"]').value;
+                
+                // Kullanıcı bilgilerini localStorage'a kaydet
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                users.push({ username, password, email });
+                localStorage.setItem('users', JSON.stringify(users));
+                
+                alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
+                toggleForms(); // Giriş formuna geç
+            } else {
+                // Giriş işlemi
+                const users = JSON.parse(localStorage.getItem('users') || '[]');
+                const user = users.find(u => u.username === username && u.password === password);
+                
+                if (user) {
+                    document.querySelector('.login-page').style.display = 'none';
+                    document.querySelector('.welcome-page').style.display = 'flex';
+                    
+                    setTimeout(() => {
+                        document.querySelector('.welcome-page').style.display = 'none';
+                        document.querySelector('.panel-page').classList.add('active');
+                    }, 4000);
+                } else {
+                    alert("Hatalı kullanıcı adı veya şifre!");
+                }
+            }
         }
 
         function toggleMenu() {
