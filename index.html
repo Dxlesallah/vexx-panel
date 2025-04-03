@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VEXX-PANEL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .panel-title {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 0 0 10px red;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .neon-ball {
+            position: absolute;
+            background: red;
+            border-radius: 50%;
+            filter: blur(5px);
+            opacity: 0;
+            transform: scale(0);
+            animation: float 10s infinite linear;
+        }
+
+        @keyframes spawn {
+            0% { 
+                opacity: 0;
+                transform: scale(0);
+            }
+            50% { 
+                opacity: 1;
+                transform: scale(1.2);
+            }
+            100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes despawn {
+            0% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.5;
+                transform: scale(0.8);
+            }
+            100% { 
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            25% { transform: translate(10px, -10px); }
+            50% { transform: translate(0, -20px); }
+            75% { transform: translate(-10px, -10px); }
+            100% { transform: translate(0, 0); }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 400px;
+            margin: 20px;
+        }
+
+        .login-container h2 {
+            color: #fff;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+
+        .form-group input:focus {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background: red;
+            border: none;
+            border-radius: 5px;
+            color: #fff;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #ff3333;
+        }
+
+        .account-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+        .account-switch a {
+            color: red;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .account-switch a:hover {
+            text-decoration: underline;
+        }
+
+        #loginForm, #registerForm {
+            display: none;
+        }
+
+        .active {
+            display: block !important;
+        }
+
+        .music-control {
+            display: none;
+        }
+
+        #youtube-player {
+            display: none;
+        }
+
+        /* Panel Sayfası Stilleri */
+        .panel-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+        }
+
+        .panel-page.active {
+            display: block;
+        }
+
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 24px;
+            text-shadow: 0 0 10px red;
+        }
+
+        .menu-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-line {
+            width: 25px;
+            height: 3px;
+            background: #fff;
+            transition: 0.3s;
+        }
+
+        .menu-button.active .menu-line:nth-child(1) {
+            transform: translateY(8px) rotate(45deg);
+        }
+
+        .menu-button.active .menu-line:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-button.active .menu-line:nth-child(3) {
+            transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -300px;
+            width: 300px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            padding: 80px 20px;
+            transition: 0.3s;
+            z-index: 1001;
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .category {
+            color: #fff;
+            padding: 15px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .category:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .content {
+            padding: 20px;
+            color: #fff;
+        }
+
+        .welcome-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .welcome-text {
+            font-size: 45px;
+            color: #ffffff;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 40px;
+            border-radius: 10px;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000,
+                       0 0 20px #ff0000,
+                       0 0 30px #ff0000;
+            animation: neonGlow 2s ease-in-out infinite alternate;
+            text-align: center;
+            width: 80%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .developer-text {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 16px;
+            color: #ff0000;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #ff0000;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ff0000;
+            text-align: center;
+            width: auto;
+        }
+
+        @keyframes neonGlow {
+            from {
+                box-shadow: 0 0 10px #ff0000,
+                           0 0 20px #ff0000,
+                           0 0 30px #ff0000;
+            }
+            to {
+                box-shadow: 0 0 20px #ff0000,
+                           0 0 30px #ff0000,
+                           0 0 40px #ff0000;
+            }
+        }
+
+        /* Tablet için medya sorguları */
+        @media screen and (max-width: 768px) {
+            .panel-title {
+                font-size: 2em;
+            }
+
+            .welcome-text {
+                font-size: 35px;
+                padding: 15px 30px;
+            }
+
+            .developer-text {
+                font-size: 14px;
+                bottom: 15px;
+                left: 15px;
+            }
+
+            .login-container {
+                padding: 30px;
+                margin: 15px;
+            }
+
+            .form-group input {
+                padding: 8px;
+                font-size: 14px;
+            }
+
+            button {
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+
+        /* Mobil için medya sorguları */
+        @media screen and (max-width: 480px) {
+            .panel-title {
+                font-size: 1.8em;
+            }
+
+            .welcome-text {
+                font-size: 30px;
+                padding: 10px 20px;
+                width: 90%;
+            }
+
+            .developer-text {
+                font-size: 12px;
+                bottom: 10px;
+                left: 10px;
+                padding: 3px 8px;
+            }
+
+            .login-container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .form-group input {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            button {
+                padding: 6px;
+                font-size: 12px;
+            }
+
+            .form-group label {
+                font-size: 12px;
+            }
+
+            .account-switch {
+                font-size: 12px;
+            }
+        }
+
+        /* Panel sayfası için responsive düzenlemeler */
+        @media screen and (max-width: 768px) {
+            .sidebar {
+                width: 250px;
+                right: -250px;
+                padding: 60px 15px;
+            }
+
+            .category {
+                padding: 12px;
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .content h1 {
+                font-size: 20px;
+            }
+
+            .content p {
+                font-size: 14px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .sidebar {
+                width: 200px;
+                right: -200px;
+                padding: 50px 10px;
+            }
+
+            .category {
+                padding: 10px;
+                font-size: 12px;
+            }
+
+            .content {
+                padding: 10px;
+            }
+
+            .content h1 {
+                font-size: 18px;
+            }
+
+            .content p {
+                font-size: 12px;
+            }
+
+            .logo {
+                font-size: 18px;
+            }
+
+            .menu-line {
+                width: 20px;
+                height: 2px;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Giriş Sayfası -->
+    <div class="login-page">
+        <h1 class="panel-title">VEXX-PANEL</h1>
+        <div class="background" id="background"></div>
+        
+        <div class="login-container">
+            <div id="registerForm" class="active">
+                <h2>Hesap Oluştur</h2>
+                <form onsubmit="showWelcome(event)">
+                    <div class="form-group">
+                        <label>Kullanıcı adı</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>E-posta</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Şifre</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button type="submit">Kayıt Ol</button>
+                </form>
+                <div class="account-switch">
+                    <span>Zaten hesabınız var mı?</span>
+                    <a onclick="toggleForms()">Giriş Yap</a>
+                </div>
+            </div>
+
+            <div id="loginForm">
+                <h2>Giriş Yap</h2>
+                <form onsubmit="showWelcome(event)">
+                    <div class="form-group">
+                        <label>Kullanıcı adı</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Şifre</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button type="submit">Giriş Yap</button>
+                </form>
+                <div class="account-switch">
+                    <span>Hesabınız yok mu?</span>
+                    <a onclick="toggleForms()">Kayıt Ol</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hoşgeldin Sayfası -->
+    <div class="welcome-page">
+        <div class="welcome-text">HOŞGELDİN</div>
+        <div class="developer-text">developed by dxles</div>
+    </div>
+
+    <!-- Panel Sayfası -->
+    <div class="panel-page">
+        <div class="navbar">
+            <div class="logo">VEXX-PANEL</div>
+            <button class="menu-button" onclick="toggleMenu()">
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+                <div class="menu-line"></div>
+            </button>
+        </div>
+
+        <div class="sidebar">
+            <div class="category">Kategori 1</div>
+            <div class="category">Kategori 2</div>
+            <div class="category">Kategori 3</div>
+            <div class="category">Kategori 4</div>
+            <div class="category">Kategori 5</div>
+        </div>
+
+        <div class="content">
+            <h1>Ana Sayfa</h1>
+            <p>Panel içeriği buraya gelecek...</p>
+        </div>
+    </div>
+
+    <script>
+        let balls = [];
+        const MIN_BALLS = 500;
+        const MAX_BALLS = 900;
+        const SPAWN_DURATION = 1000;
+        const DESPAWN_DURATION = 1000;
+        const LIFE_DURATION = 4000;
+
+        function createBall() {
+            const ball = document.createElement('div');
+            ball.className = 'neon-ball';
+            
+            const size = Math.random() * (30 - 15) + 15;
+            ball.style.width = `${size}px`;
+            ball.style.height = `${size}px`;
+            
+            ball.style.left = `${Math.random() * 100}%`;
+            ball.style.top = `${Math.random() * 100}%`;
+            
+            document.getElementById('background').appendChild(ball);
+            balls.push(ball);
+
+            // Spawn animasyonu
+            ball.style.animation = `spawn ${SPAWN_DURATION}ms ease-out forwards, float 10s infinite linear`;
+
+            // Yaşam süresi sonunda kaybolma
+            setTimeout(() => {
+                ball.style.animation = `despawn ${DESPAWN_DURATION}ms ease-out forwards`;
+                
+                setTimeout(() => {
+                    ball.remove();
+                    balls = balls.filter(b => b !== ball);
+                    
+                    // Yeni top oluştur
+                    if (balls.length < MAX_BALLS) {
+                        createBall();
+                    }
+                }, DESPAWN_DURATION);
+            }, LIFE_DURATION);
+        }
+
+        // Başlangıçta minimum sayıda top oluştur
+        for (let i = 0; i < MIN_BALLS; i++) {
+            setTimeout(() => {
+                createBall();
+            }, i * 50);
+        }
+
+        function toggleForms() {
+            document.getElementById('loginForm').classList.toggle('active');
+            document.getElementById('registerForm').classList.toggle('active');
+        }
+
+        function showWelcome(event) {
+            event.preventDefault();
+            document.querySelector('.login-page').style.display = 'none';
+            document.querySelector('.welcome-page').style.display = 'flex';
+            
+            setTimeout(() => {
+                document.querySelector('.welcome-page').style.display = 'none';
+                document.querySelector('.panel-page').classList.add('active');
+            }, 4000);
+        }
+
+        function toggleMenu() {
+            document.querySelector('.menu-button').classList.toggle('active');
+            document.querySelector('.sidebar').classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
+
