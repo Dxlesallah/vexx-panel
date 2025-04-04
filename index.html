@@ -635,7 +635,6 @@
             background: rgba(255, 0, 0, 0.2);
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Giriş Sayfası -->
@@ -859,6 +858,9 @@
                         return;
                     }
                     
+                    // Kullanıcı bilgilerini kaydet
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    
                     document.querySelector('.login-page').style.display = 'none';
                     document.querySelector('.welcome-page').style.display = 'flex';
                     
@@ -897,20 +899,6 @@
         function getRandomSong() {
             const randomIndex = Math.floor(Math.random() * songs.length);
             return songs[randomIndex];
-        }
-
-        // Şarkı listesini oluştur
-        function createMusicList() {
-            const musicList = document.getElementById('musicList');
-            musicList.innerHTML = ''; // Listeyi temizle
-            
-            songs.forEach(song => {
-                const div = document.createElement('div');
-                div.className = 'music-item';
-                div.textContent = song.title;
-                div.onclick = () => playMusic(song.path);
-                musicList.appendChild(div);
-            });
         }
 
         function playMusic(songPath) {
@@ -964,9 +952,6 @@
 
             // Müzik kontrolünü göster
             document.querySelector('.music-control').style.display = 'block';
-            
-            // Şarkı listesini oluştur
-            createMusicList();
             
             // İlk şarkıyı rastgele seç ve çal
             const randomSong = getRandomSong();
@@ -1095,6 +1080,7 @@
             submenu.classList.toggle('active');
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </body>
 </html>
 
