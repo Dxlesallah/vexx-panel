@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hata - VEXX-PANEL</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+
+        .error-container {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            width: 90%;
+            max-width: 400px;
+            margin: 20px;
+            border: 2px solid #ff0000;
+            text-align: center;
+        }
+
+        .error-container h1 {
+            color: #fff;
+            text-shadow: 0 0 10px red;
+            margin-bottom: 20px;
+        }
+
+        .error-container p {
+            color: #fff;
+            margin-bottom: 30px;
+        }
+
+        .retry-button {
+            background: red;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .retry-button:hover {
+            background: #ff3333;
+        }
+
+        .warning-text {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #ffffff;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid #ffffff;
+            text-align: center;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <h1>Erişim Engellendi</h1>
+        <p>Çok fazla istek gönderdiğiniz için erişiminiz geçici olarak engellendi.</p>
+        <p>Lütfen bir süre bekledikten sonra tekrar deneyin.</p>
+        <a href="index.html" class="retry-button">Ana Sayfaya Dön</a>
+    </div>
+
+    <div class="warning-text">Bu siteyi kullanmak kendi riskinizdedir. Herhangi bir sorumluluk kabul etmiyorum.</div>
+</body>
+</html> 
