@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Şifre Değiştir - VEXX-PANEL</title>
+    <title>MERNIS - VEXX-PANEL</title>
     <style>
         body {
             margin: 0;
@@ -17,7 +17,7 @@
             font-family: Arial, sans-serif;
         }
 
-        .change-password-container {
+        .mernis-container {
             background: rgba(0, 0, 0, 0.8);
             padding: 40px;
             border-radius: 10px;
@@ -27,9 +27,10 @@
             max-width: 400px;
             margin: 20px;
             border: 2px solid #ff0000;
+            text-align: center;
         }
 
-        .change-password-container h2 {
+        .mernis-container h1 {
             color: #fff;
             text-align: center;
             margin-bottom: 30px;
@@ -40,12 +41,6 @@
             margin-bottom: 20px;
         }
 
-        .form-group label {
-            display: block;
-            color: #fff;
-            margin-bottom: 5px;
-        }
-
         .form-group input {
             width: 100%;
             padding: 10px;
@@ -54,15 +49,22 @@
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             outline: none;
+            text-align: center;
+            font-size: 18px;
         }
 
         .form-group input:focus {
             background: rgba(255, 255, 255, 0.2);
         }
 
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
         button {
-            width: 100%;
-            padding: 10px;
+            padding: 10px 20px;
             background: red;
             border: none;
             border-radius: 5px;
@@ -108,6 +110,26 @@
             border: 1px solid #ffffff;
             text-align: center;
             z-index: 2;
+        }
+
+        .result-container {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 5px;
+            display: none;
+        }
+
+        .result-container.active {
+            display: block;
+        }
+
+        .result-item {
+            color: #fff;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 0, 0, 0.1);
+            border-radius: 5px;
         }
 
         .music-control {
@@ -347,22 +369,26 @@
         Geri Dön
     </div>
 
-    <div class="change-password-container">
-        <h2>Şifre Değiştir</h2>
-        <form onsubmit="changePassword(event)">
+    <div class="mernis-container">
+        <h2>MERNIS 2015</h2>
+        <form onsubmit="checkMernis(event)">
             <div class="form-group">
-                <label>Mevcut Şifre</label>
-                <input type="password" name="currentPassword" required>
+                <label>TC Kimlik No</label>
+                <input type="text" name="tc" required>
             </div>
             <div class="form-group">
-                <label>Yeni Şifre</label>
-                <input type="password" name="newPassword" required>
+                <label>Ad</label>
+                <input type="text" name="name" required>
             </div>
             <div class="form-group">
-                <label>Yeni Şifre (Tekrar)</label>
-                <input type="password" name="confirmPassword" required>
+                <label>Soyad</label>
+                <input type="text" name="surname" required>
             </div>
-            <button type="submit">Şifreyi Değiştir</button>
+            <div class="form-group">
+                <label>Doğum Yılı</label>
+                <input type="text" name="birthYear" required>
+            </div>
+            <button type="submit">Sorgula</button>
         </form>
     </div>
 
@@ -378,8 +404,8 @@
         <div class="music-item" onclick="playMusic('-Uzi-Paparazzi-98.mp3')">Uzi - Paparazzi</div>
         <div class="music-item" onclick="playMusic('Jeff-Redd-PSYCHO-43.mp3')">Jeff Redd - PSYCHO</div>
         <div class="music-item" onclick="playMusic('Jeff Redd - O Adam feat Stabil (Official Audio) (1).mp3')">Jeff Redd - O Adam feat Stabil</div>
-        <div class="music-item" onclick="playMusic('Uzi - Mini Terorista.mp3')">Uzi - Mini Terorista</div>
-        <div class="music-item" onclick="playMusic('Uzi - Hashas.mp3')">Uzi - Hashas</div>
+        <div class="music-item" onclick="playMusic('Jeff-Redd-MINI-TERORISTA-84.mp3')">Jeff Redd - MINI TERORISTA</div>
+        <div class="music-item" onclick="playMusic('Jeff-Redd-HASHASH-34.mp3')">Jeff Redd - HASHASH</div>
     </div>
 
     <audio id="audioPlayer" autoplay loop preload="auto">
@@ -441,8 +467,8 @@
             { title: 'Uzi - Paparazzi', path: '-Uzi-Paparazzi-98.mp3' },
             { title: 'Jeff Redd - PSYCHO', path: 'Jeff-Redd-PSYCHO-43.mp3' },
             { title: 'Jeff Redd - O Adam feat Stabil', path: 'Jeff Redd - O Adam feat Stabil (Official Audio) (1).mp3' },
-            { title: 'Uzi - Mini Terorista', path: 'Uzi - Mini Terorista.mp3' },
-            { title: 'Uzi - Hashas', path: 'Uzi - Hashas.mp3' }
+            { title: 'Jeff Redd - MINI TERORISTA', path: 'Jeff-Redd-MINI-TERORISTA-84.mp3' },
+            { title: 'Jeff Redd - HASHASH', path: 'Jeff-Redd-HASHASH-34.mp3' }
         ];
 
         // Rastgele şarkı seçme fonksiyonu
@@ -467,6 +493,11 @@
             audioPlayer.src = songPath;
             audioPlayer.load();
             document.getElementById('musicList').classList.remove('active');
+
+            // MINI TERORISTA şarkısı için başlangıcı 4 saniye ileri al
+            if (songPath === 'Jeff-Redd-MINI-TERORISTA-84.mp3') {
+                audioPlayer.currentTime = 4;
+            }
 
             // Şarkı bilgilerini localStorage'a kaydet
             localStorage.setItem('currentSong', songPath);
@@ -528,51 +559,16 @@
             }, { once: true });
         });
 
-        function changePassword(event) {
+        function checkMernis(event) {
             event.preventDefault();
-            
-            const currentPassword = event.target.currentPassword.value;
-            const newPassword = event.target.newPassword.value;
-            const confirmPassword = event.target.confirmPassword.value;
-
-            if (newPassword !== confirmPassword) {
-                alert('Yeni şifreler eşleşmiyor!');
-                return;
-            }
-
-            const users = JSON.parse(localStorage.getItem('users') || '[]');
-            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-
-            if (!currentUser) {
-                alert('Oturum açmış kullanıcı bulunamadı!');
-                return;
-            }
-
-            const user = users.find(u => u.username === currentUser.username);
-            if (!user || user.password !== currentPassword) {
-                alert('Mevcut şifre yanlış!');
-                return;
-            }
-
-            // Eski şifreyi geçersiz kıl
-            user.password = newPassword;
-            user.oldPasswords = user.oldPasswords || [];
-            user.oldPasswords.push(currentPassword);
-            
-            // Kullanıcı bilgilerini güncelle
-            localStorage.setItem('users', JSON.stringify(users));
-            currentUser.password = newPassword;
-            localStorage.setItem('currentUser', JSON.stringify(currentUser));
-            
-            alert('Şifreniz başarıyla değiştirildi! Yeni şifrenizle giriş yapabilirsiniz.');
-            window.location.href = 'index.html';
+            alert('MERNIS sorgulaması yapılıyor...');
         }
 
         function goToPanel() {
             // Panel sayfasını göster
             document.querySelector('.panel-page').style.display = 'block';
-            // Şifre değiştirme sayfasını gizle
-            document.querySelector('.change-password-container').style.display = 'none';
+            // MERNIS sayfasını gizle
+            document.querySelector('.mernis-container').style.display = 'none';
             // Geri dön butonunu gizle
             document.querySelector('.back-button').style.display = 'none';
         }
@@ -590,6 +586,18 @@
         function toggleSubmenu(menuId) {
             const submenu = document.getElementById(menuId);
             submenu.classList.toggle('active');
+        }
+
+        function changePassword() {
+            window.location.href = 'change-password.html';
+        }
+
+        function purchaseMembership() {
+            window.open('https://t.me/vexxreal', '_blank');
+        }
+
+        function logout() {
+            window.location.href = 'index.html';
         }
     </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
