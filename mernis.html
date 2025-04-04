@@ -3,42 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MERNIS - VEXX-PANEL</title>
+    <title>MERNIS Sorgulama</title>
     <style>
         body {
             margin: 0;
             padding: 0;
             background: #000;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            color: #fff;
             font-family: Arial, sans-serif;
         }
 
-        .mernis-container {
-            background: rgba(0, 0, 0, 0.8);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
-            width: 90%;
-            max-width: 400px;
-            margin: 20px;
-            border: 2px solid #ff0000;
-            text-align: center;
+        .navbar {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
         }
 
-        .mernis-container h1 {
+        .back-button {
+            background: none;
+            border: none;
             color: #fff;
-            text-align: center;
-            margin-bottom: 30px;
-            text-shadow: 0 0 10px red;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .back-button:hover {
+            color: #ff0000;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
         }
 
         .form-group {
             margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
         }
 
         .form-group input {
@@ -49,22 +60,15 @@
             background: rgba(255, 255, 255, 0.1);
             color: #fff;
             outline: none;
-            text-align: center;
-            font-size: 18px;
         }
 
         .form-group input:focus {
             background: rgba(255, 255, 255, 0.2);
         }
 
-        .button-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-        }
-
         button {
-            padding: 10px 20px;
+            width: 100%;
+            padding: 10px;
             background: red;
             border: none;
             border-radius: 5px;
@@ -78,58 +82,12 @@
             background: #ff3333;
         }
 
-        .back-button {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 10px 20px;
-            border-radius: 5px;
-            color: #fff;
-            text-decoration: none;
-            border: 1px solid #ff0000;
-            transition: 0.3s;
-        }
-
-        .back-button:hover {
-            background: rgba(255, 0, 0, 0.2);
-        }
-
-        .warning-text {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 10px;
-            color: #ffffff;
-            font-family: Arial, sans-serif;
-            text-shadow: 0 0 5px #ffffff;
-            font-weight: bold;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 3px 8px;
-            border-radius: 5px;
-            border: 1px solid #ffffff;
-            text-align: center;
-            z-index: 2;
-        }
-
-        .result-container {
+        .result {
             margin-top: 20px;
-            padding: 15px;
+            padding: 20px;
             background: rgba(0, 0, 0, 0.5);
             border-radius: 5px;
             display: none;
-        }
-
-        .result-container.active {
-            display: block;
-        }
-
-        .result-item {
-            color: #fff;
-            margin: 10px 0;
-            padding: 10px;
-            background: rgba(255, 0, 0, 0.1);
-            border-radius: 5px;
         }
 
         .music-control {
@@ -190,191 +148,23 @@
         #audioPlayer {
             display: none;
         }
-
-        /* Panel Sayfası Stilleri */
-        .panel-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            z-index: 1000;
-        }
-
-        .settings-menu {
-            position: fixed;
-            top: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.95);
-            border: 2px solid #ff0000;
-            border-radius: 10px;
-            padding: 15px;
-            display: none;
-            z-index: 1001;
-            min-width: 250px;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
-        }
-
-        .settings-menu.active {
-            display: block;
-        }
-
-        .settings-item {
-            color: #fff;
-            padding: 10px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .settings-item:hover {
-            background: rgba(255, 0, 0, 0.2);
-        }
-
-        .settings-item i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .telegram-button {
-            background: #0088cc;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-top: 10px;
-            transition: 0.3s;
-        }
-
-        .telegram-button:hover {
-            background: #006699;
-        }
-
-        .navbar {
-            background: rgba(0, 0, 0, 0.9);
-            padding: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
-        }
-
-        .logo {
-            color: #fff;
-            font-size: 24px;
-            text-shadow: 0 0 10px red;
-        }
-
-        .menu-button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .menu-line {
-            width: 25px;
-            height: 3px;
-            background: #fff;
-            transition: 0.3s;
-        }
-
-        .menu-button.active .menu-line:nth-child(1) {
-            transform: translateY(8px) rotate(45deg);
-        }
-
-        .menu-button.active .menu-line:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-button.active .menu-line:nth-child(3) {
-            transform: translateY(-8px) rotate(-45deg);
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            right: -300px;
-            width: 300px;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.95);
-            padding: 80px 20px;
-            transition: 0.3s;
-            z-index: 1001;
-        }
-
-        .sidebar.active {
-            right: 0;
-        }
-
-        .category {
-            color: #fff;
-            padding: 15px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 5px;
-        }
-
-        .category:hover {
-            background: rgba(255, 0, 0, 0.2);
-        }
-
-        .content {
-            padding: 20px;
-            color: #fff;
-        }
-
-        .submenu {
-            display: none;
-            margin-left: 20px;
-            margin-top: 5px;
-        }
-
-        .submenu.active {
-            display: block;
-        }
-
-        .submenu-item {
-            color: #fff;
-            padding: 10px;
-            margin: 5px 0;
-            cursor: pointer;
-            transition: 0.3s;
-            border-radius: 5px;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        .submenu-item:hover {
-            background: rgba(255, 0, 0, 0.2);
-        }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-    <div class="back-button" onclick="goToPanel()">
-        <i class="fas fa-arrow-left"></i>
-        Geri Dön
+    <div class="navbar">
+        <button class="back-button" onclick="window.location.href='index.html'">
+            <i class="fas fa-arrow-left"></i>
+            Geri Dön
+        </button>
     </div>
 
-    <div class="mernis-container">
-        <h2>MERNIS 2015</h2>
-        <form onsubmit="checkMernis(event)">
+    <div class="container">
+        <h1>MERNIS Sorgulama</h1>
+        <form id="mernisForm">
             <div class="form-group">
-                <label>TC Kimlik No</label>
-                <input type="text" name="tc" required>
+                <label>TC Kimlik No (Opsiyonel)</label>
+                <input type="text" name="tcno" maxlength="11" pattern="[0-9]*" inputmode="numeric">
             </div>
             <div class="form-group">
                 <label>Ad</label>
@@ -384,15 +174,14 @@
                 <label>Soyad</label>
                 <input type="text" name="surname" required>
             </div>
-            <div class="form-group">
-                <label>Doğum Yılı</label>
-                <input type="text" name="birthYear" required>
-            </div>
             <button type="submit">Sorgula</button>
         </form>
-    </div>
 
-    <div class="warning-text">Bu siteyi kullanmak kendi riskinizdedir. Herhangi bir sorumluluk kabul etmiyorum.</div>
+        <div class="result" id="result">
+            <h2>Sorgu Sonucu</h2>
+            <div id="resultContent"></div>
+        </div>
+    </div>
 
     <!-- Müzik Kontrolü -->
     <div class="music-control" onclick="toggleMusicList(event)">
@@ -412,55 +201,39 @@
         <source src="" type="audio/mpeg">
     </audio>
 
-    <div class="panel-page" style="display: none;">
-        <div class="navbar">
-            <div class="logo" onclick="toggleSettings()">VEXX-PANEL</div>
-            <button class="menu-button" onclick="toggleMenu()">
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-                <div class="menu-line"></div>
-            </button>
-        </div>
-
-        <div class="settings-menu" id="settingsMenu">
-            <div class="settings-item" onclick="changePassword()">
-                <i class="fas fa-key"></i>
-                Şifre Değiştir
-            </div>
-            <div class="settings-item" onclick="purchaseMembership()">
-                <i class="fas fa-crown"></i>
-                Üyelik Satın Al
-            </div>
-            <div class="settings-item" onclick="logout()">
-                <i class="fas fa-sign-out-alt"></i>
-                Çıkış Yap
-            </div>
-            <a href="https://t.me/laventeteam" target="_blank" class="telegram-button">
-                <i class="fab fa-telegram"></i>
-                Telegram Grubuna Katıl
-            </a>
-        </div>
-
-        <div class="sidebar">
-            <div class="category" onclick="toggleSubmenu('mernisMenu')">
-                MERNIS
-                <div class="submenu" id="mernisMenu">
-                    <div class="submenu-item" onclick="window.location.href='mernis.html'">MERNIS 2015</div>
-                </div>
-            </div>
-            <div class="category">Kategori 2</div>
-            <div class="category">Kategori 3</div>
-            <div class="category">Kategori 4</div>
-            <div class="category">Kategori 5</div>
-        </div>
-
-        <div class="content">
-            <h1>Ana Sayfa</h1>
-            <p>Panel içeriği buraya gelecek...</p>
-        </div>
-    </div>
-
     <script>
+        // MERNIS sorgulama fonksiyonu
+        document.getElementById('mernisForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData.entries());
+            
+            // TC Kimlik No kontrolü
+            if (data.tcno && (data.tcno.length !== 11 || !/^\d+$/.test(data.tcno))) {
+                alert('TC Kimlik No 11 haneli olmalıdır!');
+                return;
+            }
+            
+            // Burada gerçek MERNIS sorgulaması yapılacak
+            // Şimdilik örnek bir sonuç gösteriyoruz
+            const result = `
+                <p><strong>TC Kimlik No:</strong> ${data.tcno || 'Belirtilmedi'}</p>
+                <p><strong>Ad:</strong> ${data.name}</p>
+                <p><strong>Soyad:</strong> ${data.surname}</p>
+                <p><strong>Durum:</strong> Sorgulama başarılı</p>
+            `;
+            
+            document.getElementById('resultContent').innerHTML = result;
+            document.getElementById('result').style.display = 'block';
+        });
+
+        function toggleMusicList(event) {
+            event.stopPropagation();
+            const musicList = document.getElementById('musicList');
+            musicList.classList.toggle('active');
+        }
+
         // Şarkı listesi
         const songs = [
             { title: 'Uzi x Heijan - Hisler Gerçek, Gülüşler Sahte', path: 'Uzi-Hisler-Gercek-Gulusler-Sahte-ft-Heijan-89.mp3' },
@@ -477,31 +250,27 @@
             return songs[randomIndex];
         }
 
-        function toggleMusicList(event) {
-            event.stopPropagation();
-            const musicList = document.getElementById('musicList');
-            musicList.classList.toggle('active');
-        }
-
         function playMusic(songPath) {
             const audioPlayer = document.getElementById('audioPlayer');
             const musicItems = document.querySelectorAll('.music-item');
             
+            // Tüm müzik öğelerinden active sınıfını kaldır
             musicItems.forEach(item => item.classList.remove('active'));
+            
+            // Tıklanan öğeye active sınıfını ekle
             event.target.classList.add('active');
             
+            // Şarkıyı çal
             audioPlayer.src = songPath;
-            audioPlayer.load();
-            document.getElementById('musicList').classList.remove('active');
-
+            audioPlayer.load(); // Şarkıyı önceden yükle
+            
             // MINI TERORISTA şarkısı için başlangıcı 4 saniye ileri al
             if (songPath === 'Jeff-Redd-MINI-TERORISTA-84.mp3') {
                 audioPlayer.currentTime = 4;
             }
-
-            // Şarkı bilgilerini localStorage'a kaydet
-            localStorage.setItem('currentSong', songPath);
-            localStorage.setItem('currentSongTitle', event.target.textContent);
+            
+            // Müzik listesini gizle
+            document.getElementById('musicList').classList.remove('active');
         }
 
         // Şarkı bittiğinde yeni şarkı çal
@@ -509,6 +278,7 @@
             const randomSong = getRandomSong();
             playMusic(randomSong.path);
             
+            // Aktif şarkıyı güncelle
             const musicItems = document.querySelectorAll('.music-item');
             musicItems.forEach(item => {
                 if (item.textContent === randomSong.title) {
@@ -521,85 +291,31 @@
 
         // Sayfa yüklendiğinde
         document.addEventListener('DOMContentLoaded', function() {
+            // Müzik kontrolünü göster
+            document.querySelector('.music-control').style.display = 'block';
+            
+            // İlk şarkıyı rastgele seç ve çal
+            const randomSong = getRandomSong();
             const audioPlayer = document.getElementById('audioPlayer');
-            const savedSong = localStorage.getItem('currentSong');
-            const savedSongTitle = localStorage.getItem('currentSongTitle');
+            audioPlayer.src = randomSong.path;
+            audioPlayer.load(); // Şarkıyı önceden yükle
             
-            if (savedSong) {
-                // Kaydedilmiş şarkı varsa onu çal
-                audioPlayer.src = savedSong;
-                audioPlayer.load();
-                
-                // Aktif şarkıyı işaretle
-                const musicItems = document.querySelectorAll('.music-item');
-                musicItems.forEach(item => {
-                    if (item.textContent === savedSongTitle) {
-                        item.classList.add('active');
-                    }
-                });
-            } else {
-                // Kaydedilmiş şarkı yoksa rastgele bir şarkı seç
-                const randomSong = getRandomSong();
-                audioPlayer.src = randomSong.path;
-                audioPlayer.load();
-                
-                const musicItems = document.querySelectorAll('.music-item');
-                musicItems.forEach(item => {
-                    if (item.textContent === randomSong.title) {
-                        item.classList.add('active');
-                    }
-                });
-            }
-            
+            // Kullanıcı etkileşimi sonrası müziği başlat
             document.body.addEventListener('click', function startMusic() {
                 audioPlayer.play().catch(function(error) {
                     console.log("Müzik başlatma hatası:", error);
                 });
                 document.body.removeEventListener('click', startMusic);
             }, { once: true });
+            
+            // İlk şarkıyı aktif olarak işaretle
+            const musicItems = document.querySelectorAll('.music-item');
+            musicItems.forEach(item => {
+                if (item.textContent === randomSong.title) {
+                    item.classList.add('active');
+                }
+            });
         });
-
-        function checkMernis(event) {
-            event.preventDefault();
-            alert('MERNIS sorgulaması yapılıyor...');
-        }
-
-        function goToPanel() {
-            // Panel sayfasını göster
-            document.querySelector('.panel-page').style.display = 'block';
-            // MERNIS sayfasını gizle
-            document.querySelector('.mernis-container').style.display = 'none';
-            // Geri dön butonunu gizle
-            document.querySelector('.back-button').style.display = 'none';
-        }
-
-        function toggleMenu() {
-            document.querySelector('.menu-button').classList.toggle('active');
-            document.querySelector('.sidebar').classList.toggle('active');
-        }
-
-        function toggleSettings() {
-            const settingsMenu = document.getElementById('settingsMenu');
-            settingsMenu.classList.toggle('active');
-        }
-
-        function toggleSubmenu(menuId) {
-            const submenu = document.getElementById(menuId);
-            submenu.classList.toggle('active');
-        }
-
-        function changePassword() {
-            window.location.href = 'change-password.html';
-        }
-
-        function purchaseMembership() {
-            window.open('https://t.me/vexxreal', '_blank');
-        }
-
-        function logout() {
-            window.location.href = 'index.html';
-        }
     </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </body>
 </html> 
