@@ -31,6 +31,24 @@
             padding: 0 20px;
         }
 
+        .panel-developer {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #ffffff;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: 1px solid #ffffff;
+            text-align: center;
+            z-index: 2;
+        }
+
         .background {
             position: fixed;
             top: 0;
@@ -172,10 +190,61 @@
         }
 
         .music-control {
-            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 1000;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000;
         }
 
-        #youtube-player {
+        .music-control i {
+            color: #fff;
+            font-size: 24px;
+        }
+
+        .music-list {
+            position: fixed;
+            bottom: 120px;
+            right: 20px;
+            width: 300px;
+            max-height: 300px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 10px;
+            display: none;
+            overflow-y: auto;
+            z-index: 1000;
+            border: 2px solid #ff0000;
+            box-shadow: 0 0 10px #ff0000;
+        }
+
+        .music-list.active {
+            display: block;
+        }
+
+        .music-item {
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .music-item:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .music-item.active {
+            background: rgba(255, 0, 0, 0.3);
+        }
+
+        #audioPlayer {
             display: none;
         }
 
@@ -191,8 +260,61 @@
             z-index: 1000;
         }
 
-        .panel-page.active {
+        .settings-menu {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            border: 2px solid #ff0000;
+            border-radius: 10px;
+            padding: 15px;
+            display: none;
+            z-index: 1001;
+            min-width: 250px;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+        }
+
+        .settings-menu.active {
             display: block;
+        }
+
+        .settings-item {
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .settings-item:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
+
+        .settings-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .telegram-button {
+            background: #0088cc;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .telegram-button:hover {
+            background: #006699;
         }
 
         .navbar {
@@ -471,13 +593,56 @@
                 height: 2px;
             }
         }
+
+        .warning-text {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 10px;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            text-shadow: 0 0 5px #ffffff;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3px 8px;
+            border-radius: 5px;
+            border: 1px solid #ffffff;
+            text-align: center;
+            z-index: 2;
+        }
+
+        .submenu {
+            display: none;
+            margin-left: 20px;
+            margin-top: 5px;
+        }
+
+        .submenu.active {
+            display: block;
+        }
+
+        .submenu-item {
+            color: #fff;
+            padding: 10px;
+            margin: 5px 0;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .submenu-item:hover {
+            background: rgba(255, 0, 0, 0.2);
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
     <!-- Giriş Sayfası -->
     <div class="login-page">
+        <div class="warning-text">Bu siteyi kullanmak kendi riskinizdedir. Herhangi bir sorumluluk kabul etmiyorum.</div>
         <h1 class="panel-title">VEXX-PANEL</h1>
+        <div class="panel-developer">developed by dxles</div>
         <div class="background" id="background"></div>
         
         <div class="login-container">
@@ -534,7 +699,7 @@
     <!-- Panel Sayfası -->
     <div class="panel-page">
         <div class="navbar">
-            <div class="logo">VEXX-PANEL</div>
+            <div class="logo" onclick="toggleSettings()">VEXX-PANEL</div>
             <button class="menu-button" onclick="toggleMenu()">
                 <div class="menu-line"></div>
                 <div class="menu-line"></div>
@@ -542,8 +707,32 @@
             </button>
         </div>
 
+        <div class="settings-menu" id="settingsMenu">
+            <div class="settings-item" onclick="changePassword()">
+                <i class="fas fa-key"></i>
+                Şifre Değiştir
+            </div>
+            <div class="settings-item" onclick="purchaseMembership()">
+                <i class="fas fa-crown"></i>
+                Üyelik Satın Al
+            </div>
+            <div class="settings-item" onclick="logout()">
+                <i class="fas fa-sign-out-alt"></i>
+                Çıkış Yap
+            </div>
+            <a href="https://t.me/laventeteam" target="_blank" class="telegram-button">
+                <i class="fab fa-telegram"></i>
+                Telegram Grubuna Katıl
+            </a>
+        </div>
+
         <div class="sidebar">
-            <div class="category">Kategori 1</div>
+            <div class="category" onclick="toggleSubmenu('mernisMenu')">
+                MERNIS
+                <div class="submenu" id="mernisMenu">
+                    <div class="submenu-item" onclick="window.location.href='mernis.html'">MERNIS 2015</div>
+                </div>
+            </div>
             <div class="category">Kategori 2</div>
             <div class="category">Kategori 3</div>
             <div class="category">Kategori 4</div>
@@ -556,19 +745,37 @@
         </div>
     </div>
 
+    <!-- Müzik Kontrolü -->
+    <div class="music-control" onclick="toggleMusicList(event)">
+        <i class="fas fa-music"></i>
+    </div>
+
+    <div class="music-list" id="musicList">
+        <div class="music-item" onclick="playMusic('Uzi-Hisler-Gercek-Gulusler-Sahte-ft-Heijan-89.mp3')">Uzi x Heijan - Hisler Gerçek, Gülüşler Sahte</div>
+        <div class="music-item" onclick="playMusic('-Uzi-Paparazzi-98.mp3')">Uzi - Paparazzi</div>
+        <div class="music-item" onclick="playMusic('Jeff-Redd-PSYCHO-43.mp3')">Jeff Redd - PSYCHO</div>
+        <div class="music-item" onclick="playMusic('Jeff Redd - O Adam feat Stabil (Official Audio) (1).mp3')">Jeff Redd - O Adam feat Stabil</div>
+        <div class="music-item" onclick="playMusic('Jeff-Redd-MINI-TERORISTA-84.mp3')">Jeff Redd - MINI TERORISTA</div>
+        <div class="music-item" onclick="playMusic('Jeff-Redd-HASHASH-34.mp3')">Jeff Redd - HASHASH</div>
+    </div>
+
+    <audio id="audioPlayer" autoplay loop preload="auto">
+        <source src="" type="audio/mpeg">
+    </audio>
+
     <script>
         let balls = [];
-        const MIN_BALLS = 250;
-        const MAX_BALLS = 300;
-        const SPAWN_DURATION = 1000;
-        const DESPAWN_DURATION = 1000;
-        const LIFE_DURATION = 4000;
+        const MIN_BALLS = 20;
+        const MAX_BALLS = 30;
+        const SPAWN_DURATION = 500;
+        const DESPAWN_DURATION = 500;
+        const LIFE_DURATION = 2000;
 
         function createBall() {
             const ball = document.createElement('div');
             ball.className = 'neon-ball';
             
-            const size = Math.random() * (30 - 15) + 15;
+            const size = Math.random() * (20 - 10) + 10;
             ball.style.width = `${size}px`;
             ball.style.height = `${size}px`;
             
@@ -579,7 +786,7 @@
             balls.push(ball);
 
             // Spawn animasyonu
-            ball.style.animation = `spawn ${SPAWN_DURATION}ms ease-out forwards, float 10s infinite linear`;
+            ball.style.animation = `spawn ${SPAWN_DURATION}ms ease-out forwards, float 5s infinite linear`;
 
             // Yaşam süresi sonunda kaybolma
             setTimeout(() => {
@@ -601,7 +808,7 @@
         for (let i = 0; i < MIN_BALLS; i++) {
             setTimeout(() => {
                 createBall();
-            }, i * 50);
+            }, i * 100);
         }
 
         function toggleForms() {
@@ -626,7 +833,13 @@
                 
                 // Kullanıcı bilgilerini localStorage'a kaydet
                 const users = JSON.parse(localStorage.getItem('users') || '[]');
-                users.push({ username, password, email });
+                users.push({ 
+                    username, 
+                    password, 
+                    email,
+                    registerDate: new Date().toISOString(), // Kayıt tarihi
+                    expireDate: new Date(Date.now() + 32 * 24 * 60 * 60 * 1000).toISOString() // 32 gün sonrası
+                });
                 localStorage.setItem('users', JSON.stringify(users));
                 
                 alert('Kayıt başarılı! Şimdi giriş yapabilirsiniz.');
@@ -637,6 +850,15 @@
                 const user = users.find(u => u.username === username && u.password === password);
                 
                 if (user) {
+                    // Süre kontrolü
+                    const now = new Date();
+                    const expireDate = new Date(user.expireDate);
+                    
+                    if (now > expireDate) {
+                        alert("Hesabınızın süresi dolmuş! Lütfen yeni bir hesap oluşturun.");
+                        return;
+                    }
+                    
                     document.querySelector('.login-page').style.display = 'none';
                     document.querySelector('.welcome-page').style.display = 'flex';
                     
@@ -653,6 +875,224 @@
         function toggleMenu() {
             document.querySelector('.menu-button').classList.toggle('active');
             document.querySelector('.sidebar').classList.toggle('active');
+        }
+
+        function toggleMusicList(event) {
+            event.stopPropagation(); // Tıklama olayının yayılmasını durdur
+            const musicList = document.getElementById('musicList');
+            musicList.classList.toggle('active');
+        }
+
+        // Şarkı listesi
+        const songs = [
+            { title: 'Uzi x Heijan - Hisler Gerçek, Gülüşler Sahte', path: 'Uzi-Hisler-Gercek-Gulusler-Sahte-ft-Heijan-89.mp3' },
+            { title: 'Uzi - Paparazzi', path: '-Uzi-Paparazzi-98.mp3' },
+            { title: 'Jeff Redd - PSYCHO', path: 'Jeff-Redd-PSYCHO-43.mp3' },
+            { title: 'Jeff Redd - O Adam feat Stabil', path: 'Jeff Redd - O Adam feat Stabil (Official Audio) (1).mp3' },
+            { title: 'Jeff Redd - MINI TERORISTA', path: 'Jeff-Redd-MINI-TERORISTA-84.mp3' },
+            { title: 'Jeff Redd - HASHASH', path: 'Jeff-Redd-HASHASH-34.mp3' }
+        ];
+
+        // Rastgele şarkı seçme fonksiyonu
+        function getRandomSong() {
+            const randomIndex = Math.floor(Math.random() * songs.length);
+            return songs[randomIndex];
+        }
+
+        // Şarkı listesini oluştur
+        function createMusicList() {
+            const musicList = document.getElementById('musicList');
+            musicList.innerHTML = ''; // Listeyi temizle
+            
+            songs.forEach(song => {
+                const div = document.createElement('div');
+                div.className = 'music-item';
+                div.textContent = song.title;
+                div.onclick = () => playMusic(song.path);
+                musicList.appendChild(div);
+            });
+        }
+
+        function playMusic(songPath) {
+            const audioPlayer = document.getElementById('audioPlayer');
+            const musicItems = document.querySelectorAll('.music-item');
+            
+            // Tüm müzik öğelerinden active sınıfını kaldır
+            musicItems.forEach(item => item.classList.remove('active'));
+            
+            // Tıklanan öğeye active sınıfını ekle
+            event.target.classList.add('active');
+            
+            // Şarkıyı çal
+            audioPlayer.src = songPath;
+            audioPlayer.load(); // Şarkıyı önceden yükle
+            
+            // MINI TERORISTA şarkısı için başlangıcı 4 saniye ileri al
+            if (songPath === 'Jeff-Redd-MINI-TERORISTA-84.mp3') {
+                audioPlayer.currentTime = 4;
+            }
+            
+            // Müzik listesini gizle
+            document.getElementById('musicList').classList.remove('active');
+        }
+
+        // Şarkı bittiğinde yeni şarkı çal
+        document.getElementById('audioPlayer').addEventListener('ended', function() {
+            const randomSong = getRandomSong();
+            playMusic(randomSong.path);
+            
+            // Aktif şarkıyı güncelle
+            const musicItems = document.querySelectorAll('.music-item');
+            musicItems.forEach(item => {
+                if (item.textContent === randomSong.title) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        });
+
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            // Oturum kontrolü
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                // Kullanıcı giriş yapmışsa panel sayfasını göster
+                document.querySelector('.login-page').style.display = 'none';
+                document.querySelector('.panel-page').classList.add('active');
+            }
+
+            // Müzik kontrolünü göster
+            document.querySelector('.music-control').style.display = 'block';
+            
+            // Şarkı listesini oluştur
+            createMusicList();
+            
+            // İlk şarkıyı rastgele seç ve çal
+            const randomSong = getRandomSong();
+            const audioPlayer = document.getElementById('audioPlayer');
+            audioPlayer.src = randomSong.path;
+            audioPlayer.load(); // Şarkıyı önceden yükle
+            
+            // Kullanıcı etkileşimi sonrası müziği başlat
+            document.body.addEventListener('click', function startMusic() {
+                audioPlayer.play().catch(function(error) {
+                    console.log("Müzik başlatma hatası:", error);
+                });
+                document.body.removeEventListener('click', startMusic);
+            }, { once: true });
+            
+            // İlk şarkıyı aktif olarak işaretle
+            const musicItems = document.querySelectorAll('.music-item');
+            musicItems.forEach(item => {
+                if (item.textContent === randomSong.title) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        function toggleSettings() {
+            const settingsMenu = document.getElementById('settingsMenu');
+            settingsMenu.classList.toggle('active');
+        }
+
+        function changePassword() {
+            window.location.href = 'change-password.html';
+        }
+
+        function purchaseMembership() {
+            window.open('https://t.me/vexxreal', '_blank');
+        }
+
+        function logout() {
+            document.querySelector('.panel-page').classList.remove('active');
+            document.querySelector('.login-page').style.display = 'block';
+            document.getElementById('settingsMenu').classList.remove('active');
+            // localStorage'dan kullanıcı bilgilerini temizle
+            localStorage.removeItem('currentUser');
+        }
+
+        // Ayarlar menüsünü dışarı tıklandığında kapat
+        document.addEventListener('click', function(event) {
+            const settingsMenu = document.getElementById('settingsMenu');
+            const logo = document.querySelector('.logo');
+            
+            if (!settingsMenu.contains(event.target) && !logo.contains(event.target)) {
+                settingsMenu.classList.remove('active');
+            }
+        });
+
+        // DDoS koruması için IP kontrolü
+        let requestCount = {};
+        const MAX_REQUESTS = 10; // 10 saniyede maksimum istek sayısı
+        const BLOCK_DURATION = 300000; // 5 dakika blok süresi
+
+        function checkRequestLimit() {
+            const ip = localStorage.getItem('clientIP') || 'unknown';
+            const now = Date.now();
+            
+            if (!requestCount[ip]) {
+                requestCount[ip] = {
+                    count: 0,
+                    lastReset: now,
+                    blockedUntil: 0
+                };
+            }
+
+            // 10 saniyelik periyodu kontrol et
+            if (now - requestCount[ip].lastReset > 10000) {
+                requestCount[ip].count = 0;
+                requestCount[ip].lastReset = now;
+            }
+
+            // Blok süresini kontrol et
+            if (now < requestCount[ip].blockedUntil) {
+                alert('Çok fazla istek gönderdiniz. Lütfen ' + 
+                      Math.ceil((requestCount[ip].blockedUntil - now) / 1000) + 
+                      ' saniye bekleyin.');
+                return false;
+            }
+
+            // İstek sayısını artır
+            requestCount[ip].count++;
+
+            // Maksimum istek sayısını aştıysa blokla
+            if (requestCount[ip].count > MAX_REQUESTS) {
+                requestCount[ip].blockedUntil = now + BLOCK_DURATION;
+                alert('Çok fazla istek gönderdiniz. 5 dakika boyunca bloklandınız.');
+                return false;
+            }
+
+            return true;
+        }
+
+        // Her form gönderiminde kontrol et
+        document.addEventListener('submit', function(event) {
+            if (!checkRequestLimit()) {
+                event.preventDefault();
+            }
+        });
+
+        // Her sayfa yüklemesinde kontrol et
+        window.addEventListener('load', function() {
+            if (!checkRequestLimit()) {
+                window.location.href = 'error.html';
+            }
+        });
+
+        // IP adresini al ve kaydet
+        fetch('https://api.ipify.org?format=json')
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('clientIP', data.ip);
+            })
+            .catch(() => {
+                localStorage.setItem('clientIP', 'unknown');
+            });
+
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            submenu.classList.toggle('active');
         }
     </script>
 </body>
